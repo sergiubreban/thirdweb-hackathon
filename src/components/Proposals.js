@@ -1,82 +1,73 @@
 import { useWeb3 } from "@3rdweb/hooks";
-import { Box, Button, Flex, useColorMode, Center, Heading, Stack, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, useColorMode, Center, Heading, Stack, Text, Select } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { useVoteModule } from "../context";
 import { ProposalStateMapper } from "../dataMapper";
+import { genres } from "../utils";
 import ProposalItem from "./ProposalItem";
 
 
 const Proposals = () => {
-  // const bundleDropModule = useBundleDropModule();
-  const voteModule = useVoteModule()
-  const [proposals, setProposals] = useState([]);
+  const { proposals } = useVoteModule();
   const [filteredProposals, setFilteredProposals] = useState([]);
-  const [activeFilters, setActiveFilters] = useState([1, 3, 4]); // default items to vote
+  const [stateFilters, setStateFilters] = useState([1, 3, 4]);
+  const [genreFilter, setGenreFilter] = useState(null);
+
   const { colorMode } = useColorMode();
 
   useEffect(() => {
-    setFilteredProposals(activeFilters.length > 0 ? proposals?.filter?.((p) => activeFilters.indexOf(p.state) > -1) : proposals);
-  }, [proposals, activeFilters, setFilteredProposals]);
+    let filterList = [...proposals];
+    if (stateFilters.length > 0 || genreFilter) {
+      filterList = filterList?.filter?.((p) => stateFilters.indexOf(p.state) > -1 && (!genreFilter || p.genre === genreFilter))
+    }
+    setFilteredProposals(filterList);
+  }, [proposals, stateFilters, genreFilter, setFilteredProposals]);
 
   const { address } = useWeb3();
-
-  // Retrieve all our existing proposals from the contract.
-  useEffect(() => {
-    // A simple call to voteModule.getAll() to grab the proposals.
-    voteModule
-      .getAll()
-      .then((proposals) => {
-        // Set state!
-        setProposals(proposals);
-        console.log("🌈 Proposals:", proposals)
-      })
-      .catch((err) => {
-        console.error("failed to get proposals", err);
-      });
-
-  }, [voteModule, setProposals]);
 
   if (!address) {
     return null
   }
 
-  const toggle = (key) => {
-    setActiveFilters(activeFilters.indexOf(key) > -1 ? activeFilters.filter((f) => f !== key) : [...activeFilters, key])
+  const toggleStateFilter = (key) => {
+    setStateFilters(stateFilters.indexOf(key) > -1 ? stateFilters.filter((f) => f !== key) : [...stateFilters, key])
   }
 
   return <Flex direction='row' mt='6' spacing='2' color='#fff' bg={ colorMode === 'light' ? '#1A202Ced' : `#008fee10` } borderRadius='15px' p='4'>
     <Box flex='1'>
       <Box position='sticky' top='20px' p='3' >
-        <ProposalFilters activeFilters={ activeFilters } toggle={ toggle } />
+        <ProposalFilters stateFilters={ stateFilters } toggleStateFilter={ toggleStateFilter } genre={ genreFilter } handleGenreChange={ setGenreFilter } />
       </Box>
     </Box>
     <Box flex='3'>
       <Center><Text fontWeight='600'>Go over proposals and vote if you are for or against it</Text></Center>
       <Center mt='2'><Heading fontSize='1.4rem'>Active Proposals</Heading></Center>
-      { filteredProposals?.map?.((proposal) => <ProposalItem key={ proposal.proposalId } proposal={ proposal } />) }
+      { filteredProposals?.map?.((proposal, i) => <ProposalItem key={ `${proposal.proposalId}_${i}` } proposal={ proposal } />) }
     </Box >
   </Flex >
 }
 
-const ProposalFilters = ({ activeFilters, toggle }) => {
+const ProposalFilters = ({ stateFilters, genre, toggleStateFilter, handleGenreChange }) => {
   const [showLegend, setShowLegend] = useState(false);
 
   return <>
-    <Text mb='4'>Filter by proposal state</Text>
+    <Text my='4'>Genre</Text>
+    <Select value={ genre ?? '' } onChange={ (e) => handleGenreChange(e.target.value) } placeholder='All' w='220px'>
+      { genres.map((genre) => <option key={ genre } value={ genre }>{ genre }</option>) }
+    </Select>
+    <Text my='4'>State</Text>
     <Flex flexWrap='wrap'>
       { [1, 4, 3].map((key) => {
         // { Object.keys(ProposalStateMapper).map((key) => {
         const intKey = parseInt(key);
 
         return <Button
-          // flex={ ['40%', '30%', '20%'] }
-          // flex='25%'
           w='80px'
           size='xs'
           margin='0 10px 10px 0'
           key={ key }
-          bg={ activeFilters.indexOf(intKey) > -1 ? `proposalStatus.${key}` : '' }
-          onClick={ () => toggle(intKey) }>
+          bg={ stateFilters.indexOf(intKey) > -1 ? `proposalStatus.${key}` : '' }
+          onClick={ () => toggleStateFilter(intKey) }>
           { ProposalStateMapper[key] }
         </Button>
       }) }

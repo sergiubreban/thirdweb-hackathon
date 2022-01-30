@@ -4,14 +4,23 @@ const shortenAddress = (str) => {
 };
 
 const getYoutubeId = (url) => {
-  var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-  var match = url.match(regExp);
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url?.match?.(regExp);
 
-  if (match && match[2].length === 11) {
+  if (match && match?.[2]?.length === 11) {
     return match[2];
   } else {
     return null;
   }
 }
+const genres = ['Hip Hop', 'Rock', 'Reggae', 'Country', 'Funk', 'Soul', 'Blues', 'electronic', 'Pop', 'Jazz', 'Disco', 'Vocal', 'Traditional']
 
-export { shortenAddress, getYoutubeId }
+const jsonParser = (data) => {
+  try {
+    return JSON.parse(data);
+  } catch (error) {
+    return {}
+  }
+}
+
+export { shortenAddress, getYoutubeId, genres, jsonParser }

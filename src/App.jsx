@@ -5,6 +5,7 @@ import { UnsupportedChainIdError } from "@web3-react/core";
 import { useBundleDropModule, useSdk } from "./context";
 import Menu from "./components/Menu";
 import { Box, Text, Button, Center, Heading, Stack, Flex } from "@chakra-ui/react";
+import RithmVisualizer from "./components/RithmVisualizer";
 
 
 const App = () => {
@@ -16,12 +17,10 @@ const App = () => {
   const landingRef = useRef();
 
   useEffect(() => {
-    // We pass the signer to the sdk, which enables us to interact with our deployed contract!
     sdk.setProviderOrSigner(signer);
   }, [sdk, signer]);
 
   useEffect(() => {
-    // If they don't have an connected wallet, exit!
     if (!address) {
       return;
     }
@@ -73,13 +72,10 @@ const Landing = ({ onNftClaimed, networkError }) => {
 
   const mintNft = () => {
     setIsClaiming(true);
-    // Call bundleDropModule.claim("0", 1) to mint nft to user's wallet.
     bundleDropModule
       .claim("0", 1)
       .then(() => {
-        // Set claim state.
         onNftClaimed();
-        // Show user their fancy new NFT!
         console.log(
           `🌊 Successfully Minted! Check it out on OpenSea: https://testnets.opensea.io/assets/${bundleDropModule.address}/0`
         );
@@ -100,24 +96,7 @@ const Landing = ({ onNftClaimed, networkError }) => {
     </Stack>
     <Stack spacing={ 2 } marginTop='20vh'>
       <Box position='relative' mx='3'>
-        <div className="now playing" id="music">
-          <span className="bar n1">A</span>
-          <span className="bar n2">B</span>
-          <span className="bar n3">c</span>
-          <span className="bar n4">D</span>
-          <span className="bar n5">E</span>
-          <span className="bar n6">F</span>
-          <span className="bar n7">G</span>
-          <span className="bar n8">H</span>
-          <span className="bar n1">A</span>
-          <span className="bar n2">B</span>
-          <span className="bar n3">c</span>
-          <span className="bar n4">D</span>
-          <span className="bar n5">E</span>
-          <span className="bar n6">F</span>
-          <span className="bar n7">G</span>
-          <span className="bar n8">H</span>
-        </div>
+        <Center ><RithmVisualizer bars={ 10 } /></Center>
       </Box>
       <Box marginTop='40px'>
         <Center >

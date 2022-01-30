@@ -1,13 +1,13 @@
 .playing {
-  position: absolute;
+  /* position: absolute;
   top: 50%;
   left: 50%;
   width: auto;
-  transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%); */
 }
 
 .playing:after {
-  content: "BRB MUSIC";
+  /* content: "BRB MUSIC"; */
   text-align: center;
   display: block;
   width: 100%;
@@ -15,7 +15,7 @@
   margin-bottom: 50px;
 }
 
-.now.playing .bar {
+.playing .bar {
   display: inline-block;
   position: relative;
   margin-right: 1px;
@@ -35,39 +35,7 @@
 }
 
 .paused.playing:after {
-  content: "Paused (Lame)"
-}
-
-.n1 {
-  animation-delay: 0.5s;
-}
-
-.n2 {
-  animation-delay: 0.2s;
-}
-
-.n3 {
-  animation-delay: 1.2s;
-}
-
-.n4 {
-  animation-delay: 0.9s;
-}
-
-.n5 {
-  animation-delay: 2.3s;
-}
-
-.n6 {
-  animation-delay: 1.3s;
-}
-
-.n7 {
-  animation-delay: 3.1s;
-}
-
-.n8 {
-  animation-delay: 1.9s;
+  content: "BRB MUSIC"
 }
 
 @keyframes pulse {

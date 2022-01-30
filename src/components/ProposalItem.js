@@ -2,30 +2,21 @@ import { useWeb3 } from "@3rdweb/hooks";
 import { Box, Button, Flex } from "@chakra-ui/react";
 import { Stack, Text } from "@chakra-ui/react";
 import { ethers } from "ethers";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useTokenModule, useVoteModule } from "../context";
 import { ProposalStateMapper } from "../dataMapper";
 import { getYoutubeId } from "../utils";
 import Address from "./Address";
 
-const jsonParser = (data) => {
-  try {
-    return JSON.parse(data);
-  } catch (error) {
-    return {}
-  }
-}
 const ProposalItem = (props) => {
   const { proposal } = props;
   const [isVoting, setIsVoting] = useState(false);
   const [isExecuting, setIsExecuting] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
   const tokenModule = useTokenModule()
-  const voteModule = useVoteModule()
-  console.log({ proposal })
+  const { voteModule } = useVoteModule()
   const { address } = useWeb3();
   useEffect(() => {
-    // Check if the user has already voted on the first proposal.
     voteModule
       .hasVoted(proposal.proposalId, address)
       .then((hasVoted) => {
@@ -50,8 +41,6 @@ const ProposalItem = (props) => {
       try {
         // then we check if the proposal is open for voting (state === 1 means it is open)
         if (proposal.state === 1) {
-          // if it is open for voting, we'll vote on it
-          console.log("successfully voted", vote.proposalId, vote.vote);
           await voteModule.vote(vote.proposalId, vote.vote);
           setHasVoted(true);
         }
@@ -61,7 +50,6 @@ const ProposalItem = (props) => {
     } catch (err) {
       console.error("failed to delegate tokens");
     } finally {
-      // in *either* case we need to set the isVoting state to false to enable the button again
       setIsVoting(false);
     }
   }
@@ -71,16 +59,13 @@ const ProposalItem = (props) => {
       if (proposal.state === 4) {
         setIsExecuting(true)
         await voteModule.execute(proposal.proposalId);
-        console.log('executed')
       }
     } catch (err) {
       console.error("failed to execute votes", err);
     }
     setIsExecuting(false)
   }
-  console.log({ proposal })
-  const proposalDescription = proposal.description;
-  const { link, amount, genre } = useMemo(() => jsonParser(proposalDescription), [proposalDescription])
+  const { link, amount, genre } = proposal
   if (!link) {
     return null;
   }

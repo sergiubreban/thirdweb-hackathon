@@ -27,7 +27,7 @@ const ProposalForm = () => {
     if (state === 'success') {
       toast({
         title: 'Proposal created.',
-        description: "Your proposal is now in the blockchain, it will appear in the list a few seconds!",
+        description: "Your proposal is now in the blockchain, it will appear in the list in seconds!!",
         status: 'success',
         duration: 9000,
         isClosable: true

@@ -14,12 +14,10 @@ const Community = () => {
   const { colorMode } = useColorMode();
 
   const memberList = useMemo(() => {
-    return memberAddresses.concat(['trest', 'trest1', 'trest2', 'trest3', 'trest212', 'trest3234', 'trest22', 'trest36', 'trest3623', 'trest361', 'trest36122', 'trest362345', 'trest36111', 'trest362324']).map((address) => {
+    return memberAddresses.map((address) => {
       return {
         address,
         tokenAmount: ethers.utils.formatUnits(
-          // If the address isn't in memberTokenAmounts, it means they don't
-          // hold any of our token.
           memberTokenAmounts[address] || 0,
           18,
         ),
@@ -27,9 +25,7 @@ const Community = () => {
     });
   }, [memberAddresses, memberTokenAmounts]);
 
-  // This useEffect grabs the # of token each member holds.
   useEffect(() => {
-    // Grab all the balances.
     tokenModule
       .getAllHolderBalances()
       .then((amounts) => {
@@ -42,8 +38,6 @@ const Community = () => {
   }, [tokenModule]);
 
   useEffect(() => {
-    // Just like we did in the 7-airdrop-token.js file! Grab the users who hold our NFT
-    // with tokenId 0.
     bundleDropModule
       .getAllClaimerAddresses("0")
       .then((addresess) => {
@@ -57,17 +51,15 @@ const Community = () => {
 
   return <Flex >
     <Stack flex='1' m='3' spacing={ 3 }>
-
-      <Box color='#fff' bg={ colorMode === 'light' ? '#1A202Ced' : `#008fee10` } margin='12px' borderRadius='15px' p='4' flex='1' >
+      <Box color='#fff' bg={ colorMode === 'light' ? '#1A202Ced' : `#008fee10` } margin='12px' borderRadius='15px' p='4'  >
         <Center>
           <Stack direction='row' spacing={ 2 }><Text>Author:</Text> <Text fontWeight='600'>Sergiu Breban</Text></Stack>
           <Stack direction='row' mx='2'>
-            <Link href='https://breban.ro' target='_blank'><IconButton aria-label='linkedin' borderRadius='25px' _hover={ { bg: '#1A202C44' } } icon={ <BiWorld /> } color='dark' /></Link>
-            <Link href='https://www.linkedin.com/in/sergiu-breban-13ba63b1/' target='_blank'><IconButton aria-label='linkedin' borderRadius='25px' _hover={ { bg: '#1A202C44' } } icon={ <BsLinkedin /> } color='dark' /></Link>
-            <Link href='https://sergiubreban.medium.com/' target='_blank'><IconButton aria-label='medium' borderRadius='25px' _hover={ { bg: '#1A202C44' } } icon={ <BsMedium /> } color='dark' /></Link>
-            <Link href='https://github.com/sergiubreban' target='_blank'><IconButton aria-label='github' borderRadius='25px' _hover={ { bg: '#1A202C44' } } icon={ <BsGithub /> } color='dark' /></Link>
-            <Link href='https://twitter.com/SergiuBreban' target='_blank'><IconButton aria-label='twitter' borderRadius='25px' _hover={ { bg: '#1A202C44' } } icon={ <BsTwitter /> } color='dark' /></Link>
-
+            <Link  href='https://breban.ro' target='_blank'><IconButton variant='outline' aria-label='linkedin' borderRadius='25px' _hover={ { bg: '#1A202C44' } } icon={ <BiWorld /> } color='dark' /></Link>
+            <Link  href='https://www.linkedin.com/in/sergiu-breban-13ba63b1/' target='_blank'><IconButton variant='outline' aria-label='linkedin' borderRadius='25px' _hover={ { bg: '#1A202C44' } } icon={ <BsLinkedin /> } color='dark' /></Link>
+            <Link  href='https://sergiubreban.medium.com/' target='_blank'><IconButton variant='outline' aria-label='medium' borderRadius='25px' _hover={ { bg: '#1A202C44' } } icon={ <BsMedium /> } color='dark' /></Link>
+            <Link  href='https://github.com/sergiubreban' target='_blank'><IconButton variant='outline' aria-label='github' borderRadius='25px' _hover={ { bg: '#1A202C44' } } icon={ <BsGithub /> } color='dark' /></Link>
+            <Link  href='https://twitter.com/SergiuBreban' target='_blank'><IconButton variant='outline' aria-label='twitter' borderRadius='25px' _hover={ { bg: '#1A202C44' } } icon={ <BsTwitter /> } color='dark' /></Link>
           </Stack>
         </Center>
       </Box>

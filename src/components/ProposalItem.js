@@ -1,5 +1,5 @@
 import { useWeb3 } from "@3rdweb/hooks";
-import { Box, Button, Flex } from "@chakra-ui/react";
+import { Box, Button, Flex, useToast } from "@chakra-ui/react";
 import { Stack, Text } from "@chakra-ui/react";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
@@ -15,6 +15,7 @@ const ProposalItem = (props) => {
   const [hasVoted, setHasVoted] = useState(false);
   const tokenModule = useTokenModule()
   const { voteModule } = useVoteModule()
+  const toast = useToast()
   const { address } = useWeb3();
   useEffect(() => {
     voteModule
@@ -28,6 +29,7 @@ const ProposalItem = (props) => {
   }, [proposal, address, setHasVoted, voteModule]);
 
   const voteProposal = async (type) => {
+    setIsVoting(true);
     const vote = {
       proposalId: proposal.proposalId,
       vote: type
@@ -43,6 +45,13 @@ const ProposalItem = (props) => {
         if (proposal.state === 1) {
           await voteModule.vote(vote.proposalId, vote.vote);
           setHasVoted(true);
+          toast({
+            title: 'Voted!',
+            description: "Your vote is now in the blockchain!",
+            status: 'success',
+            duration: 9000,
+            isClosable: true
+          })
         }
       } catch (err) {
         console.error("failed to vote", err);
@@ -59,6 +68,13 @@ const ProposalItem = (props) => {
       if (proposal.state === 4) {
         setIsExecuting(true)
         await voteModule.execute(proposal.proposalId);
+        toast({
+          title: 'Vote executed!',
+          description: "The decision has been settled!",
+          status: 'success',
+          duration: 9000,
+          isClosable: true
+        })
       }
     } catch (err) {
       console.error("failed to execute votes", err);
@@ -69,7 +85,8 @@ const ProposalItem = (props) => {
   if (!link) {
     return null;
   }
-  return <Stack spacing='5' boxShadow='inset 0 1px 0 0 rgba(255, 255, 255, 0.1)' border='1px solid #182738' borderRadius='15px' p='15px' m='4'>
+
+return <Stack spacing='5' boxShadow='inset 0 1px 0 0 rgba(255, 255, 255, 0.1)' border='1px solid #182738' borderRadius='15px' p='15px' m='4'>
     <Stack direction={ 'row' } spacing='1'>
       <Box bg={ `proposalStatus.genre` } px='1' borderRadius='5px'><Text color='#000'>{ genre }</Text></Box>
       <Box bg={ `proposalStatus.${proposal.state}` } px='1' borderRadius='5px'>{ ProposalStateMapper[proposal.state] }</Box>

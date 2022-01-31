@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { ThirdwebSDK } from "@3rdweb/sdk";
 import { ethers } from "ethers";
 import { useWeb3 } from "@3rdweb/hooks";
@@ -30,7 +30,7 @@ export const DAOProvider = (props) => {
     setXState('loading')
     try {
       const amount = 1_000;
-      const response = await voteModule.propose(
+      await voteModule.propose(
         JSON.stringify({ link, amount, genre }),
         [
           {
@@ -50,11 +50,8 @@ export const DAOProvider = (props) => {
 
       setXState('success')
       fetchProposals()
-      console.log(
-        "✅ Successfully created proposal to reward ourselves from the treasury, let's hope people vote for it!", { response }
-      );
+
     } catch (error) {
-      console.error("failed to create second proposal", error);
       setError(error)
       setXState('error')
     }
@@ -77,6 +74,13 @@ export const DAOProvider = (props) => {
         console.error("failed to get proposals", err);
       });
   }
+
+  useEffect(() => {
+    if (proposals.find((proposal) => proposal.state === 0)) {
+      // pull near real-data from the blockchain until the state is changing
+      setTimeout(fetchProposals, 5000)
+    }
+  }, [proposals]);
 
   useSafeLayoutEffect(() => {
     fetchProposals()

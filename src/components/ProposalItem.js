@@ -130,7 +130,7 @@ const ProposalItem = (props) => {
           ))
         )}
         {proposal.state === 4 && (
-          <Button isLoading={isExecuting} onClick={() => execute()}>
+          <Button variant="simple" isLoading={isExecuting} onClick={() => execute()}>
             execute
           </Button>
         )}

@@ -17,6 +17,8 @@ const connectors = {
 };
 
 const BrbMusicDaoTheme = extendTheme({
+  initialColorMode: 'dark',
+  useSystemColorMode: true,
   colors: {
     proposalStatus: {
       0: '#677e8d',

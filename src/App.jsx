@@ -34,7 +34,7 @@ const App = () => {
       .then((balance) => {
         // If balance is greater than 0, they have our NFT!
         if (balance.gt(0)) {
-            setHasClaimedNFT(true);
+          setHasClaimedNFT(true);
         } else {
           setHasClaimedNFT(false);
         }

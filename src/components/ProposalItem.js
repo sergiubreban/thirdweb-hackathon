@@ -17,6 +17,7 @@ const ProposalItem = (props) => {
   const { voteModule } = useVoteModule()
   const toast = useToast()
   const { address } = useWeb3()
+
   useEffect(() => {
     voteModule
       .hasVoted(proposal.proposalId, address)
@@ -47,7 +48,7 @@ const ProposalItem = (props) => {
           setHasVoted(true)
           toast({
             title: 'Voted!',
-            description: 'Your vote is now in the blockchain!',
+            description: 'Your vote is now on the blockchain!',
             status: 'success',
             duration: 9000,
             isClosable: true,
@@ -82,6 +83,7 @@ const ProposalItem = (props) => {
     setIsExecuting(false)
   }
   const { link, amount, genre } = proposal
+
   if (!link) {
     return null
   }
@@ -143,6 +145,7 @@ const EmbedLink = ({ link }) => {
   const youtubeId = getYoutubeId(link)
   const [show, setShow] = useState(false)
   const [showMore, setShowMore] = useState(true)
+
   return (
     <Box>
       <Flex justify="space-between">

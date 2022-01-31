@@ -31,10 +31,6 @@ const Proposals = () => {
 
   const { address } = useWeb3()
 
-  if (!address) {
-    return null
-  }
-
   const toggleStateFilter = (key) => {
     setStateFilters(stateFilters.indexOf(key) > -1 ? stateFilters.filter((f) => f !== key) : [...stateFilters, key])
   }
@@ -46,9 +42,12 @@ const Proposals = () => {
       if (newLimit >= filteredProposals.length) {
         setHasMore(false)
       }
-
       setLimit(newLimit)
     }, 1000)
+  }
+
+  if (!address) {
+    return null
   }
 
   return (

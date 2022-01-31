@@ -1,5 +1,5 @@
 import { useWeb3 } from '@3rdweb/hooks'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Dashboard from './components/Dashboard'
 import { useBundleDropModule, useSdk } from './context'
 import Menu from './components/Menu'
@@ -7,6 +7,7 @@ import { Box, Button, Center, Flex, useToast } from '@chakra-ui/react'
 import Tour from 'reactour'
 import Landing from './components/Landing'
 import ErrorView from './components/Error'
+import { tourSteps } from './tourSteps'
 
 const App = () => {
   const bundleDropModule = useBundleDropModule()
@@ -15,7 +16,6 @@ const App = () => {
   const [hasClaimedNFT, setHasClaimedNFT] = useState(false)
   const [isTourOpen, setIsTourOpen] = useState(false)
   const signer = provider?.getSigner?.()
-  const landingRef = useRef()
   const toast = useToast()
 
   useEffect(() => {
@@ -54,7 +54,7 @@ const App = () => {
               </Button>
             </Center>
           )}
-          <Box {...(hasClaimedNFT && { className: 'disappear' })} ref={landingRef}>
+          <Box {...(hasClaimedNFT && { className: 'disappear' })}>
             <Landing
               address={address}
               onNftClaimed={() => {
@@ -85,32 +85,5 @@ const App = () => {
     </>
   )
 }
-
-const tourSteps = [
-  {
-    selector: '.menu-actions',
-    content: 'From here you can visit project Github Page for accessing the code or switch the Color Theme.',
-  },
-  {
-    selector: '.comunity-tab',
-    content: 'Here you can find informations about the community',
-  },
-  {
-    selector: '.proposal-tab',
-    content: 'Here you can find the music list!',
-  },
-  {
-    selector: '.proposal-filters',
-    content: 'You can filter the list using this panel.',
-  },
-  {
-    selector: '.proposal-vote',
-    content: 'You can vote the proposal here',
-  },
-  {
-    selector: '.proposal-form',
-    content: 'From here you can share your music to the community.',
-  },
-]
 
 export default App

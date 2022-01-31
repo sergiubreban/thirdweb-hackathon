@@ -14,22 +14,11 @@ const ProposalForm = () => {
   const genreRef = useRef(null)
   const toast = useToast()
 
-  const submitForm = () => {
-    if (genre && link) {
-      addProposalVote({ link, genre })
-      setLink('')
-    } else if (!link) {
-      linkRef.current.focus()
-    } else if (!genre) {
-      genreRef.current.focus()
-    }
-  }
-
   useEffect(() => {
     if (state === 'success') {
       toast({
         title: 'Proposal created.',
-        description: 'Your proposal is now in the blockchain, it will appear in the list in seconds!!',
+        description: 'Your proposal is now on the blockchain!!',
         status: 'success',
         duration: 9000,
         isClosable: true,
@@ -44,6 +33,17 @@ const ProposalForm = () => {
       })
     }
   }, [state]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const submitForm = () => {
+    if (genre && link) {
+      addProposalVote({ link, genre })
+      setLink('')
+    } else if (!link) {
+      linkRef.current.focus()
+    } else if (!genre) {
+      genreRef.current.focus()
+    }
+  }
 
   return (
     <Stack direction="row" alignItems="center" className="proposal-form">

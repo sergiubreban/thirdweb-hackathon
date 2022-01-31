@@ -1,13 +1,17 @@
-import { Text, Tooltip } from "@chakra-ui/react";
-import { useState } from "react"
-import { shortenAddress } from "../utils";
+import { Text, Tooltip } from '@chakra-ui/react'
+import { useState } from 'react'
+import { shortenAddress } from '../utils'
 
 const Address = ({ address, ...textProps }) => {
-  const [short, setShort] = useState(true);
+  const [short, setShort] = useState(true)
 
-  return <Tooltip label={ short ? address : '' }>
-    <Text as='span' { ...textProps } display='inline' cursor='pointer' onClick={ () => setShort(!short) }>{ short ? shortenAddress(address) : address }</Text>
-  </Tooltip>
+  return (
+    <Tooltip label={short ? address : ''}>
+      <Text as="span" {...textProps} display="inline" cursor="pointer" onClick={() => setShort(!short)}>
+        {short ? shortenAddress(address) : address}
+      </Text>
+    </Tooltip>
+  )
 }
 
-export default Address;
+export default Address

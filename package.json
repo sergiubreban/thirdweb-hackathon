@@ -31,7 +31,15 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "lint": "eslint src/**/*.js src/**/*.jsx",
+    "format": "npx prettier --write src/**/*.js src/**/*.jsx",
     "eject": "react-scripts eject"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 120,
+    "singleQuote": true,
+    "endOfLine": "lf"
   },
   "eslintConfig": {
     "extends": [
@@ -50,5 +58,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "eslint-plugin-react": "^7.28.0",
+    "prettier": "^2.5.1"
   }
 }

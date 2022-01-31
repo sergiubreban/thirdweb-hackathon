@@ -135,7 +135,7 @@ const Landing = ({ onNftClaimed, networkError }) => {
         <Heading>Welcome to 🎧 Music DAO</Heading>
       </Center>
       <Center>
-        <Text maxW='700px'>This portal offers you the opportinity to vote music inside a category. In this way we can create top song lists based on community trend. To participate in a voting pool you need to prove your DAO membership with our special NFT.
+        <Text maxW='700px'>This portal offers you the opportinity to vote music while beeing part of an awesome community. In this way we can create top song lists based on community trend. To participate in a voting pool you need to prove your DAO membership with our special NFT.
           When you propose good music to our community you will be rewarded with 1000 BRBM.
         </Text>
       </Center>

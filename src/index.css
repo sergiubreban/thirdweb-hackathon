@@ -82,6 +82,10 @@ button {
   animation-fill-mode: forwards;
 }
 
+#___reactour {
+  color: #1A202C;
+}
+
 @keyframes disappear {
   from {
     height: 450px;

@@ -27,6 +27,7 @@ const Proposals = () => {
     }
 
     setFilteredProposals(filterList)
+    setHasMore(filterList.length > defaultPerPage)
   }, [proposals, stateFilters, genreFilter, setFilteredProposals])
 
   const { address } = useWeb3()
@@ -89,9 +90,9 @@ const Proposals = () => {
             </Stack>
           }
           endMessage={
-            <p style={{ textAlign: 'center' }}>
+            <Box textAlign="center" m="20px">
               <b>Yay! You have seen it all</b>
-            </p>
+            </Box>
           }
         >
           {filteredProposals.slice(0, limit).map((proposal, i) => (

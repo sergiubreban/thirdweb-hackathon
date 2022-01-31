@@ -4,7 +4,7 @@ import { Box, Button, Stack, Center, Heading, Flex, useToast, Text } from "@chak
 import { useState } from "react";
 import { useBundleDropModule } from "../context";
 
-const Landing = ({ onNftClaimed }) => {
+const Landing = ({ address, onNftClaimed }) => {
   const [isClaiming, setIsClaiming] = useState(false);
   const bundleDropModule = useBundleDropModule();
   const mintNft = () => {
@@ -13,9 +13,6 @@ const Landing = ({ onNftClaimed }) => {
       .claim("0", 1)
       .then(() => {
         onNftClaimed();
-        console.log(
-          `🌊 Successfully Minted! Check it out on OpenSea: https://testnets.opensea.io/assets/${bundleDropModule.address}/0`
-        );
       })
       .catch((err) => console.error("failed to claim", err))
       .finally(() => setIsClaiming(false));
@@ -39,12 +36,12 @@ const Landing = ({ onNftClaimed }) => {
         <Center >
           <Stack spacing='2'>
             <Text>Mint your free DAO Membership NFT</Text>
-            <Button
+            { !!address && <Button
               disabled={ isClaiming }
               onClick={ () => mintNft() }
             >
               { isClaiming ? "Minting..." : "Mint your nft (FREE)" }
-            </Button>
+            </Button> }
           </Stack>
         </Center>
       </Box>

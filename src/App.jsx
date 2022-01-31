@@ -48,27 +48,23 @@ const App = () => {
     <Menu hasClaimedNFT={ hasClaimedNFT } openTour={ () => setIsTourOpen(true) } />
     <Flex h='100vh' flexDirection='column'>
       <Box mb='2'>
-        { error || !address ? (<>
-          <Center>
-            <Heading>Welcome to MusicDAO</Heading>
-          </Center>
-          <Center><Button variant='outline' onClick={ () => connectWallet("injected") } className="btn-hero">
+        { !!error || !address && <Center>
+          <Button variant='outline' onClick={ () => connectWallet("injected") } className="btn-hero">
             Connect your wallet
           </Button>
-          </Center>
-        </>) :
-          <Box { ...(hasClaimedNFT && { className: 'disappear' }) } ref={ landingRef }><Landing onNftClaimed={ () => {
-            toast({
-              title: 'Your just mint your NFT!',
-              description: "No you have access to the platform!",
-              status: 'success',
-              duration: 9000,
-              isClosable: true
-            })
-            setHasClaimedNFT(true)
-            setTimeout(() => setIsTourOpen(true), 1000) // wait for the animation to end
-          } } /></Box>
+        </Center>
         }
+        <Box { ...(hasClaimedNFT && { className: 'disappear' }) } ref={ landingRef }><Landing address={address} onNftClaimed={ () => {
+          toast({
+            title: 'Your just mint your NFT!',
+            description: "No you have access to the platform!",
+            status: 'success',
+            duration: 9000,
+            isClosable: true
+          })
+          setHasClaimedNFT(true)
+          setTimeout(() => setIsTourOpen(true), 1000) // wait for the animation to end
+        } } /></Box>
       </Box>
       <Box flex='1' { ...(!hasClaimedNFT && { bg: '#1A202C' }) } transition='background 1s linear'>
         { error && <ErrorView error={ error } /> }

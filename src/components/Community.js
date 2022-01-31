@@ -29,7 +29,6 @@ const Community = () => {
     tokenModule
       .getAllHolderBalances()
       .then((amounts) => {
-        console.log("👜 Amounts", amounts)
         setMemberTokenAmounts(amounts);
       })
       .catch((err) => {
@@ -41,7 +40,6 @@ const Community = () => {
     bundleDropModule
       .getAllClaimerAddresses("0")
       .then((addresess) => {
-        console.log("🚀 Members addresses", addresess)
         setMemberAddresses(addresess);
       })
       .catch((err) => {

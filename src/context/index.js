@@ -56,10 +56,6 @@ export const DAOProvider = (props) => {
       setXState('error')
     }
   }
-  // const resetActionState = () => {
-  //   setXState('init')
-  //   setError(null)
-  // }
 
   const fetchProposals = () => {
     voteModule

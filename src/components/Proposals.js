@@ -62,7 +62,7 @@ const Proposals = () => {
         dataLength={ limit }
         next={ fetchMore }
         hasMore={ hasMore }
-        loader={ <Stack spacing={ 3 } padding='20px'>
+        loader={ <Stack spacing={ 3 } padding='20px' mt='40px'>
           <Skeleton h='20px' />
           <Skeleton h='20px' />
           <Skeleton h='20px' />

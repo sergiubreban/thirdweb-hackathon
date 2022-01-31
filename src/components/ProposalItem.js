@@ -1,5 +1,5 @@
 import { useWeb3 } from "@3rdweb/hooks";
-import { Box, Button, Flex, useToast } from "@chakra-ui/react";
+import { Box, Button, Flex, Tooltip, useToast } from "@chakra-ui/react";
 import { Stack, Text } from "@chakra-ui/react";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
@@ -86,10 +86,10 @@ const ProposalItem = (props) => {
     return null;
   }
 
-return <Stack spacing='5' boxShadow='inset 0 1px 0 0 rgba(255, 255, 255, 0.1)' border='1px solid #182738' borderRadius='15px' p='15px' m='4'>
+  return <Stack spacing='5' boxShadow='inset 0 1px 0 0 rgba(255, 255, 255, 0.1)' border='1px solid #182738' borderRadius='15px' p='15px' m='4'>
     <Stack direction={ 'row' } spacing='1'>
-      <Box bg={ `proposalStatus.genre` } px='1' borderRadius='5px'><Text color='#000'>{ genre }</Text></Box>
-      <Box bg={ `proposalStatus.${proposal.state}` } px='1' borderRadius='5px'>{ ProposalStateMapper[proposal.state] }</Box>
+      <Tooltip label='Genre'><Box bg={ `proposalStatus.genre` } px='1' borderRadius='5px'><Text color='#000'>{ genre }</Text></Box></Tooltip>
+      <Tooltip label='Status'><Box bg={ `proposalStatus.${proposal.state}` } px='1' borderRadius='5px'>{ ProposalStateMapper[proposal.state] }</Box></Tooltip>
       { hasVoted && <Box bg={ `proposalStatus.1` } px='1' borderRadius='5px'>voted</Box> }
     </Stack>
     <Flex justify='space-between'>
@@ -97,7 +97,7 @@ return <Stack spacing='5' boxShadow='inset 0 1px 0 0 rgba(255, 255, 255, 0.1)' b
       <Text>Prize: { amount }</Text>
     </Flex>
     { link && <EmbedLink link={ link } /> }
-    <Flex justify='space-around'>
+    <Flex justify='space-around' className='proposal-vote'>
       { hasVoted ? <Text>Already Voted</Text> :
         proposal.votes.map((vote) => (<Button variant='simple' key={ vote.type } isLoading={ isVoting } onClick={ () => voteProposal(vote.type) } >
           { vote.label }
@@ -114,9 +114,9 @@ const EmbedLink = ({ link }) => {
   const youtubeId = getYoutubeId(link);
   const [show, setShow] = useState(false);
 
-  return youtubeId ? <iframe title='youtube-iframe' src={ `https://www.youtube.com/embed/${youtubeId}` } width="100%" height="380" frameBorder="0" allowtransparency="true" allow="encrypted-media" /> :
+  return youtubeId ? <iframe title='youtube-iframe' src={ `https://www.youtube.com/embed/${youtubeId}?enablejsapi=1` } width="100%" height="380" frameBorder="0" allowtransparency="true" allow="encrypted-media" /> :
     <>
-      <Button onClick={ () => setShow(true) }>Go to song</Button>
+      <Button _hover={ { color: '#fff' } } variant='outline' onClick={ () => setShow(true) }>Go to song</Button>
       { show && <iframe title='spotify-iframe' src={ link } width="100%" height="380" frameBorder="0" allowtransparency="true" allow="encrypted-media" /> }
     </>
 }

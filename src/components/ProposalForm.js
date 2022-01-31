@@ -43,7 +43,7 @@ const ProposalForm = () => {
     }
   }, [state]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  return <Stack direction='row' alignItems='center'>
+  return <Stack direction='row' alignItems='center' className='proposal-form'>
     <Tooltip label='Copy / Paste a Youtube or Spotify link here! If your proposal wins the vote, you will win 1000 tokens! Each proposal can be voted within 24 hours(STOP VOTE after 24h).'>
       <WarningIcon />
     </Tooltip>

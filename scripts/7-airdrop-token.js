@@ -3,10 +3,10 @@ import sdk from "./1-initialize-sdk.js";
 import dotenv from "dotenv";
 dotenv.config();
 
-const bundleDropModule = sdk.getBundleDropModule(process.env.BUNDLE_DROP_ADDRESS);
+const bundleDropModule = sdk.getBundleDropModule(process.env.REACT_APP_BUNDLE_DROP_ADDRESS);
 
 // This is the address to our ERC-20 token contract.
-const tokenModule = sdk.getTokenModule(process.env.TOKEN_ADDRESS);
+const tokenModule = sdk.getTokenModule(process.env.REACT_APP_TOKEN_ADDRESS);
 
 (async () => {
   try {

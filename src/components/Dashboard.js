@@ -14,12 +14,12 @@ const Dashboard = () => {
     <Box mt='5vh'>
       <Tabs>
         <TabList>
-          <Tab>Music</Tab>
-          <Tab>Community</Tab>
+          <Tab className='proposal-tab'>Music</Tab>
+          <Tab className='comunity-tab'>Community</Tab>
         </TabList>
 
         <TabPanels>
-          <TabPanel>
+          <TabPanel >
             <Proposals />
           </TabPanel>
           <TabPanel>

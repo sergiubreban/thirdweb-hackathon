@@ -1,8 +1,9 @@
 import sdk from "./1-initialize-sdk.js";
+import dotenv from "dotenv";
+import Address from "../src/components/Address.js";
+dotenv.config();
 
-const tokenModule = sdk.getTokenModule(
-  "0xe497E57da8Ad041DC758501278807A322f96a55C",
-);
+const tokenModule = sdk.getTokenModule(process.env.REACT_APP_TOKEN_ADDRESS);
 
 (async () => {
   try {

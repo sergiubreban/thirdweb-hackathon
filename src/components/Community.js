@@ -49,7 +49,7 @@ const Community = () => {
       });
   }, [bundleDropModule]);
 
-  return <Flex >
+  return <Flex className='comunity'>
     <Stack flex='1' m='3' spacing={ 3 }>
       <Box color='#fff' bg={ colorMode === 'light' ? '#1A202Ced' : `#008fee10` } margin='12px' borderRadius='15px' p='4'  >
         <Center>

@@ -1,13 +1,12 @@
-import { useSwitchNetwork, useWeb3 } from "@3rdweb/hooks";
+import { useWeb3 } from "@3rdweb/hooks";
 import { useEffect, useRef, useState } from "react";
 import Dashboard from "./components/Dashboard";
-import { UnsupportedChainIdError } from "@web3-react/core";
 import { useBundleDropModule, useSdk } from "./context";
 import Menu from "./components/Menu";
-import { Box, Text, Button, Center, Heading, Stack, Flex, useToast } from "@chakra-ui/react";
-import RithmVisualizer from "./components/RithmVisualizer";
+import { Box, Button, Center, Heading, Flex, useToast } from "@chakra-ui/react";
 import Tour from 'reactour'
-
+import Landing from './components/Landing';
+import ErrorView from "./components/Error";
 
 const App = () => {
   const bundleDropModule = useBundleDropModule();
@@ -44,10 +43,7 @@ const App = () => {
         setHasClaimedNFT(false);
       });
   }, [address, bundleDropModule, setHasClaimedNFT]);
-  console.log({ error, hasClaimedNFT })
-  // useEffect(() => {
 
-  // },[error])
   return <>
     <Menu hasClaimedNFT={ hasClaimedNFT } openTour={ () => setIsTourOpen(true) } />
     <Flex h='100vh' flexDirection='column'>
@@ -80,7 +76,7 @@ const App = () => {
         { hasClaimedNFT && <Box p='4'>
           <Dashboard />
           <Tour
-            steps={ steps }
+            steps={ tourSteps }
             isOpen={ isTourOpen }
             onRequestClose={ () => setIsTourOpen(false) } />
         </Box> }
@@ -90,23 +86,7 @@ const App = () => {
   </>
 };
 
-const ErrorView = ({ error }) => {
-  const { switchNetwork } = useSwitchNetwork();
-  const isNetworkError = error instanceof UnsupportedChainIdError;
-
-  return <Center m='8'>
-    { isNetworkError ? <Box cursor='pointer' onClick={ () => {
-      console.log("switch")
-      switchNetwork(4)
-    } } color='#1A202C' p={ 3 } bg='linear-gradient(to bottom, #ff9500, #ff5e3a)' borderRadius='15px'>
-      <Heading>Network error!</Heading>
-      <Text>Click to change network to Rinkeby</Text>
-    </Box> : <Box color='#1A202C' p={ 3 } bg='linear-gradient(to bottom, #ff9500, #ff5e3a)' borderRadius='15px'>
-      <Heading>Unexpected Error</Heading>
-    </Box> }
-  </Center>
-}
-const steps = [
+const tourSteps = [
   {
     selector: '.menu-actions',
     content: 'From here you can visit project Github Page for accessing the code or switch the Color Theme.',
@@ -132,53 +112,5 @@ const steps = [
     content: 'From here you can share your music to the community.',
   },
 ]
-
-const Landing = ({ onNftClaimed }) => {
-  const [isClaiming, setIsClaiming] = useState(false);
-  const bundleDropModule = useBundleDropModule();
-  const mintNft = () => {
-    setIsClaiming(true);
-    bundleDropModule
-      .claim("0", 1)
-      .then(() => {
-        onNftClaimed();
-        console.log(
-          `🌊 Successfully Minted! Check it out on OpenSea: https://testnets.opensea.io/assets/${bundleDropModule.address}/0`
-        );
-      })
-      .catch((err) => console.error("failed to claim", err))
-      .finally(() => setIsClaiming(false));
-  }
-  return <>
-    <Stack spacing={ 2 }>
-      <Center>
-        <Heading>Welcome to 🎧 Music DAO</Heading>
-      </Center>
-      <Center>
-        <Text maxW='700px'>This portal offers you the opportinity to vote music while beeing part of an awesome community. In this way we can create top song lists based on community trend. To participate in a voting pool you need to prove your DAO membership with our special NFT.
-          When you propose good music to our community you will be rewarded with 1000 BRBM.
-        </Text>
-      </Center>
-    </Stack>
-    <Stack spacing={ 2 } marginTop='20vh'>
-      <Box position='relative' mx='3'>
-        <Center ><RithmVisualizer bars={ 10 } /></Center>
-      </Box>
-      <Box marginTop='40px' position='relative'>
-        <Center >
-          <Stack spacing='2'>
-            <Text>Mint your free DAO Membership NFT</Text>
-            <Button
-              disabled={ isClaiming }
-              onClick={ () => mintNft() }
-            >
-              { isClaiming ? "Minting..." : "Mint your nft (FREE)" }
-            </Button>
-          </Stack>
-        </Center>
-      </Box>
-    </Stack>
-  </>
-}
 
 export default App;

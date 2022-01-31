@@ -28,11 +28,9 @@ const App = () => {
       return;
     }
 
-    // Check if the user has the NFT by using bundleDropModule.balanceOf
     return bundleDropModule
       .balanceOf(address, "0")
       .then((balance) => {
-        // If balance is greater than 0, they have our NFT!
         if (balance.gt(0)) {
           setHasClaimedNFT(true);
         } else {

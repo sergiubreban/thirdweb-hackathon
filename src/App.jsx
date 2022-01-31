@@ -25,6 +25,7 @@ const App = () => {
 
   useEffect(() => {
     if (!address) {
+      hasClaimedNFT && setHasClaimedNFT(false)
       return;
     }
 
@@ -43,12 +44,15 @@ const App = () => {
         setHasClaimedNFT(false);
       });
   }, [address, bundleDropModule, setHasClaimedNFT]);
+  console.log({ error, hasClaimedNFT })
+  // useEffect(() => {
 
+  // },[error])
   return <>
     <Menu hasClaimedNFT={ hasClaimedNFT } openTour={ () => setIsTourOpen(true) } />
     <Flex h='100vh' flexDirection='column'>
       <Box mb='2'>
-        { !error && !address ? (<>
+        { error || !address ? (<>
           <Center>
             <Heading>Welcome to MusicDAO</Heading>
           </Center>
@@ -57,7 +61,7 @@ const App = () => {
           </Button>
           </Center>
         </>) :
-          <Box { ...(hasClaimedNFT && { className: 'disappear' }) } ref={ landingRef }><Landing networkError={ error instanceof UnsupportedChainIdError } onNftClaimed={ () => {
+          <Box { ...(hasClaimedNFT && { className: 'disappear' }) } ref={ landingRef }><Landing onNftClaimed={ () => {
             toast({
               title: 'Your just mint your NFT!',
               description: "No you have access to the platform!",
@@ -71,6 +75,7 @@ const App = () => {
         }
       </Box>
       <Box flex='1' { ...(!hasClaimedNFT && { bg: '#1A202C' }) } transition='background 1s linear'>
+        { error && <ErrorView error={ error } /> }
         <Box h='3px' w='100%' bg='#fff' boxShadow={ 'inset 0 0 0.5em 0 #fff, 0 0 0.5em 0 #fff' } />
         { hasClaimedNFT && <Box p='4'>
           <Dashboard />
@@ -85,6 +90,22 @@ const App = () => {
   </>
 };
 
+const ErrorView = ({ error }) => {
+  const { switchNetwork } = useSwitchNetwork();
+  const isNetworkError = error instanceof UnsupportedChainIdError;
+
+  return <Center m='8'>
+    { isNetworkError ? <Box cursor='pointer' onClick={ () => {
+      console.log("switch")
+      switchNetwork(4)
+    } } color='#1A202C' p={ 3 } bg='linear-gradient(to bottom, #ff9500, #ff5e3a)' borderRadius='15px'>
+      <Heading>Network error!</Heading>
+      <Text>Click to change network to Rinkeby</Text>
+    </Box> : <Box color='#1A202C' p={ 3 } bg='linear-gradient(to bottom, #ff9500, #ff5e3a)' borderRadius='15px'>
+      <Heading>Unexpected Error</Heading>
+    </Box> }
+  </Center>
+}
 const steps = [
   {
     selector: '.menu-actions',
@@ -112,10 +133,9 @@ const steps = [
   },
 ]
 
-const Landing = ({ onNftClaimed, networkError }) => {
+const Landing = ({ onNftClaimed }) => {
   const [isClaiming, setIsClaiming] = useState(false);
   const bundleDropModule = useBundleDropModule();
-
   const mintNft = () => {
     setIsClaiming(true);
     bundleDropModule
@@ -147,39 +167,18 @@ const Landing = ({ onNftClaimed, networkError }) => {
       <Box marginTop='40px' position='relative'>
         <Center >
           <Stack spacing='2'>
-            { networkError ? <NetworkError /> : <>
-              <Text>Mint your free DAO Membership NFT</Text>
-              <Button
-                disabled={ isClaiming }
-                onClick={ () => mintNft() }
-              >
-                { isClaiming ? "Minting..." : "Mint your nft (FREE)" }
-              </Button>
-            </> }
+            <Text>Mint your free DAO Membership NFT</Text>
+            <Button
+              disabled={ isClaiming }
+              onClick={ () => mintNft() }
+            >
+              { isClaiming ? "Minting..." : "Mint your nft (FREE)" }
+            </Button>
           </Stack>
         </Center>
       </Box>
     </Stack>
   </>
 }
-const NetworkError = () => {
-  const { switchNetwork } = useSwitchNetwork();
-  return (
-    <Flex mt='10vh'>
-      <Box flex='1'><Text as='h2' textStyle='h2' fontWeight='600'>Please connect to Rinkeby</Text>
-        <Text fontWeight='600'>
-          This dapp only works on the Rinkeby network, please switch networks
-          in your connected wallet.
-        </Text>
-      </Box>
-      <Box flex='1' position='relative' bottom={ 0 } cursor='pointer' onClick={ () => {
-        console.log("switch")
-        switchNetwork(4)
-      } } color='#1A202C' p={ 3 } bg='linear-gradient(to bottom, #ff9500, #ff5e3a)' borderRadius='15px'>
-        <Heading>Network error!</Heading>
-        <Text>Click to change network to Rinkeby</Text>
-      </Box>
-    </Flex>
-  );
-}
+
 export default App;

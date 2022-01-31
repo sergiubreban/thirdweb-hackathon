@@ -1,15 +1,17 @@
 import { useWeb3 } from "@3rdweb/hooks";
-import { Box, Button, Flex, useColorMode, Center, Heading, Stack, Text, Select } from "@chakra-ui/react";
+import { Box, Button, Flex, useColorMode, Center, Heading, Stack, Text, Select, Skeleton } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
 import { useVoteModule } from "../context";
 import { ProposalStateMapper } from "../dataMapper";
 import { genres } from "../utils";
 import ProposalItem from "./ProposalItem";
 
-
+const defaultPerPage = 3;
 const Proposals = () => {
   const { proposals } = useVoteModule();
-  console.log({ proposals })
+  const [limit, setLimit] = useState(defaultPerPage)
+  const [hasMore, setHasMore] = useState(true)
   const [filteredProposals, setFilteredProposals] = useState([]);
   const [stateFilters, setStateFilters] = useState([0, 1, 3, 4]);
   const [genreFilter, setGenreFilter] = useState(null);
@@ -17,12 +19,11 @@ const Proposals = () => {
   const { colorMode } = useColorMode();
 
   useEffect(() => {
-    console.log({ proposals }, 'useefect proposals', { stateFilters, genreFilter })
     let filterList = [...proposals];
     if (stateFilters.length > 0 || genreFilter) {
       filterList = filterList?.filter?.((p) => stateFilters.indexOf(p.state) > -1 && (!genreFilter || p.genre === genreFilter))
     }
-    console.log('filtered', { filterList })
+
     setFilteredProposals(filterList);
   }, [proposals, stateFilters, genreFilter, setFilteredProposals]);
 
@@ -36,6 +37,18 @@ const Proposals = () => {
     setStateFilters(stateFilters.indexOf(key) > -1 ? stateFilters.filter((f) => f !== key) : [...stateFilters, key])
   }
 
+  const fetchMore = () => {
+    const newLimit = limit + defaultPerPage
+
+    setTimeout(() => {
+      if (newLimit >= filteredProposals.length) {
+        setHasMore(false)
+      }
+
+      setLimit(newLimit)
+    }, 1000)
+  }
+
   return <Flex direction='row' mt='6' spacing='2' color='#fff' bg={ colorMode === 'light' ? '#1A202Ced' : `#008fee10` } borderRadius='15px' p='4'>
     <Box flex='1'>
       <Box position='sticky' top='20px' p='3' >
@@ -45,7 +58,23 @@ const Proposals = () => {
     <Box flex='3' className='proposal-list'>
       <Center><Text fontWeight='600'>Go over proposals and vote if you are for or against it</Text></Center>
       <Center mt='2'><Heading fontSize='1.4rem'>Active Proposals</Heading></Center>
-      { filteredProposals?.map?.((proposal, i) => <ProposalItem key={ `${proposal.proposalId}_${i}` } proposal={ proposal } />) }
+      <InfiniteScroll
+        dataLength={ limit }
+        next={ fetchMore }
+        hasMore={ hasMore }
+        loader={ <Stack spacing={ 3 } padding='20px'>
+          <Skeleton h='20px' />
+          <Skeleton h='20px' />
+          <Skeleton h='20px' />
+        </Stack> }
+        endMessage={
+          <p style={ { textAlign: "center" } }>
+            <b>Yay! You have seen it all</b>
+          </p>
+        }
+      >
+        { filteredProposals.slice(0, limit).map((proposal, i) => <ProposalItem key={ `${proposal.proposalId}_${i}` } proposal={ proposal } />) }
+      </InfiniteScroll>
     </Box >
   </Flex >
 }
